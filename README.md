@@ -1,0 +1,1 @@
+## Simple Test of Kind plugin for Github Actions
