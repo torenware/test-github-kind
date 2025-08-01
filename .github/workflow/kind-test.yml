@@ -5,7 +5,7 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@main
       - uses: engineerd/setup-kind@v0.6.0
         with:
           version: "v0.24.0"
