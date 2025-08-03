@@ -24,14 +24,14 @@ jobs:
           kubectl version
           kubectl get pods -n kube-system
 
-          # if [[ -z "$(docker ps --filter "name=custom-registry" --format "{{.ID}}")" ]]; then
-          #     echo "Registry is not present"
-          #     exit 1
-          # fi
+          if [[ -z "$(docker ps --filter "name=custom-registry" --format '{{.ID}}')" ]]; then
+              echo "Registry is not present"
+              exit 1
+          fi
 
           docker pull busybox
-          docker tag busybox $LOCAL_REGISTRY/localbusybox
-          docker push $LOCAL_REGISTRY/localbusybox
+          docker tag busybox "${{ env.LOCAL_REGISTRY/localbusybox }}"
+          docker push "${{ env.LOCAL_REGISTRY/localbusybox }}"
 
-          kubectl create job test --image=$LOCAL_REGISTRY/localbusybox
+          kubectl create job test "${{ env.LOCAL_REGISTRY/localbusybox }}"
           kubectl wait --for=condition=complete --timeout=30s job/test
