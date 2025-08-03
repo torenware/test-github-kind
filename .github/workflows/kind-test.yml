@@ -5,8 +5,10 @@ jobs:
   kind:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: helm/kind-action@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - id: kind
+        uses: helm/kind-action@v1
         with:
           registry: true
           registry_name: custom-registry
