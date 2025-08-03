@@ -20,6 +20,7 @@ jobs:
             LOCAL_REGISTRY: ${{ steps.kind.outputs.LOCAL_REGISTRY }}
 
         run: |
+            echo "LOCAL_REGISTRY = ${{ env.LOCAL_REGISTRY }}"
             kubectl cluster-info
             kubectl version
             kubectl get pods -n kube-system
