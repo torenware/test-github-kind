@@ -58,7 +58,18 @@ jobs:
 
             docker pull busybox
             docker tag busybox registry:5000/verybusy
+            if [ $? -eq 0 ]; then
+              echo "Tag of image succeeded"
+            else
+              echo "#### tag of image failed"
+            fi 
+
+
             docker push registry:5000/verybusy
+
+            if [ $? -ne 0 ]; then
+              echo "#### Push to registry failed"
+            fi 
 
             # kubectl run busy --image registry:5000/verybusy
             # sleep 30
