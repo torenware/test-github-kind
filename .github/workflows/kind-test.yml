@@ -9,13 +9,28 @@ jobs:
         uses: azure/setup-kubectl@v4
         with:
           version: 'v1.32.0'
+      - name: install kind locally
+        run: |
+
+          # For ARM64
+          [ $(uname -m) = aarch64 ] && curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-arm64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+
   kind:
     runs-on: ubuntu-latest
     needs:
       - prereqs
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        
       - id: kind
         uses: helm/kind-action@v1
         # with:
@@ -38,5 +53,12 @@ jobs:
             kubectl get pods -n kube-system
 
             docker pull busybox
+            docker tag busybox registry:5000/verybusy
+            docker push registry:5000/verybusy
+
+            # kubectl run busy --image registry:5000/verybusy
+            # sleep 30
+            # kubectl describe pod busy
+            
             kubectl create job test --image busybox
             kubectl wait --for=condition=complete --timeout=30s job/test
